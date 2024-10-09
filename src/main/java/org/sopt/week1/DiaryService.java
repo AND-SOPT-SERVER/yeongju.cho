@@ -1,36 +1,40 @@
 package org.sopt.week1;
 
 import java.util.List;
+import org.sopt.week1.Main.UI.IdNotExistException;
 
 public class DiaryService {
     private final DiaryRepository diaryRepository = new DiaryRepository();
 
-    // 일기 작성 기능
     void writeDiary(final String body) {
-        if (body.length() > 30) {
-           return;
-        }
+        DiaryValidator.validate(body);
+
         final Diary diary = new Diary(null, body);
         diaryRepository.save(diary);
     }
 
-    // 일기 조회 기능
     List<Diary> getDiaryList(){
         return diaryRepository.findAll();
     }
 
-    // 일기 삭제 기능
     void deleteDiary(final String id) {
         final Long diaryId = Long.parseLong(id);
-        diaryRepository.delete(diaryId);
+
+        if (diaryRepository.existById(diaryId)) {
+            diaryRepository.delete(diaryId);
+        } else {
+            throw new IdNotExistException();
+        }
     }
 
-    // 일기 수정 기능
     void patchDiary(final String id, final String body) {
-        if(body.length() > 30){
-            return;
-        }
+        DiaryValidator.validate(body);
+
         final Long diaryId = Long.parseLong(id);
-        diaryRepository.patch(diaryId, body);
+        if (diaryRepository.existById(diaryId)) {
+            diaryRepository.patch(diaryId, body);
+        } else {
+            throw new IdNotExistException();
+        }
     }
 }
