@@ -42,6 +42,11 @@ public class DiaryRepository {
     }
 
     void patch(final Long id, final String body) {
+        //삭제된 일기(일기의 body가 null) 라면 수정 못하고 리턴
+        final String dairyBody = storage.get(id);
+        if (dairyBody == null) {
+            return;
+        }
         storage.put(id, body);
     }
 }

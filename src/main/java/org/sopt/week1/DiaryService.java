@@ -7,6 +7,9 @@ public class DiaryService {
 
     // 일기 작성 기능
     void writeDiary(final String body) {
+        if (body.length() > 30) {
+           return;
+        }
         final Diary diary = new Diary(null, body);
         diaryRepository.save(diary);
     }
@@ -24,6 +27,9 @@ public class DiaryService {
 
     // 일기 수정 기능
     void patchDiary(final String id, final String body) {
+        if(body.length() > 30){
+            return;
+        }
         final Long diaryId = Long.parseLong(id);
         diaryRepository.patch(diaryId, body);
     }

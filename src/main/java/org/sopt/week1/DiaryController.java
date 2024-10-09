@@ -24,9 +24,6 @@ public class DiaryController {
     }
 
     final void post(final String body) {
-        if (body.length() > 30) { // Q :검증 과정 꼭 컨트롤러에서 해야할까여?
-            throw new IllegalArgumentException();  // Q : 왜 이 예외를 던지셨을까여?
-        }
         diaryService.writeDiary(body);
     }
 
@@ -35,9 +32,6 @@ public class DiaryController {
     }
 
     final void patch(final String id, final String body) {
-        if(body.length() > 30){
-            throw new IllegalArgumentException();
-        }
         diaryService.patchDiary(id, body);
     }
 
