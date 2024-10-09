@@ -23,6 +23,12 @@ public class Main {
 
         class InvalidInputException extends UIException {
         }
+
+        class DiaryBodyLengthException extends UIException{
+        }
+
+        class IdNotExistException extends UIException{
+        }
     }
 
     static class DiaryUI implements UI {
@@ -48,6 +54,10 @@ public class Main {
                     run();
                 } catch (InvalidInputException e) {
                     ConsoleIO.printLine("잘못된 값을 입력하였습니다.");
+                } catch (DiaryBodyLengthException e) {
+                    ConsoleIO.printLine("일기의 본문은 30자 이내여야 합니다.");
+                } catch (IdNotExistException e) {
+                    ConsoleIO.printLine("해당 Id 값이 존재하지 않습니다.");
                 }
 
                 if (isFinished()) {
