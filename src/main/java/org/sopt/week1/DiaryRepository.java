@@ -1,14 +1,18 @@
 package org.sopt.week1;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import org.sopt.week1.Main.UI.LimitEditException;
 
 public class DiaryRepository {
     private final Map<Long, String> storage = new ConcurrentHashMap<>();
     private final Map<Long, String> deletedStorage = new ConcurrentHashMap<>();
+    private final Map<Long, Integer> patchCount = new ConcurrentHashMap<>(); //수정 횟수
+    private final Map<Long, LocalDate> patchDate = new ConcurrentHashMap<>(); // 마지막으로 수정한 날짜
     private final AtomicLong numbering = new AtomicLong();
 
     void save(final Diary diary){
@@ -18,6 +22,8 @@ public class DiaryRepository {
 
         // 저장 과정
         storage.put(id, diary.getBody());
+        patchCount.put(id, 0);
+        patchDate.put(id, LocalDate.now());
     }
 
     List<Diary> findAll() {
@@ -42,21 +48,36 @@ public class DiaryRepository {
         String removedDiary = storage.remove(id);
         if(removedDiary != null){
             deletedStorage.put(id, removedDiary);
+            patchCount.remove(id);  // 삭제 시 수정 횟수 제거
+            patchDate.remove(id);  // 삭제 시 날짜 제거
         }
     }
 
     void patch(final Long id, final String body) {
-        /*
-        replace() : key 가 존재할 때에만 값을 변경
-        put() : key 가 존재하지 않으면 새로운 key-value 쌍을 추가
-         */
+        LocalDate today = LocalDate.now();
+        LocalDate last = patchDate.getOrDefault(id, today);
+
+        if(!today.equals(last)){
+            patchCount.put(id, 0);
+            patchDate.put(id, today);
+        }
+
+        int count = patchCount.getOrDefault(id, 0);
+
+        if(count >= 2){
+            throw new LimitEditException();
+        }
         storage.replace(id, body);
+        patchCount.put(id, count + 1);
+        patchDate.put(id, today);
     }
 
     void restore(final Long id) {
         String beRestore = deletedStorage.remove(id);
         if (beRestore != null) {
             storage.put(id, beRestore);
+            patchCount.put(id, 0);
+            patchDate.put(id, LocalDate.now());
         }
     }
 
