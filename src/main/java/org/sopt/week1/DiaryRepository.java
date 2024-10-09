@@ -42,11 +42,14 @@ public class DiaryRepository {
     }
 
     void patch(final Long id, final String body) {
-        //삭제된 일기(일기의 body가 null) 라면 수정 못하고 리턴
-        final String dairyBody = storage.get(id);
-        if (dairyBody == null) {
-            return;
-        }
-        storage.put(id, body);
+        /*
+        replace() : key 가 존재할 때에만 값을 변경
+        put() : key 가 존재하지 않으면 새로운 key-value 쌍을 추가
+         */
+        storage.replace(id, body);
+    }
+
+    boolean existById(final Long id){
+        return storage.containsKey(id);
     }
 }
