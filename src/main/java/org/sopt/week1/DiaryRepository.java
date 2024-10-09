@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class DiaryRepository {
     private final Map<Long, String> storage = new ConcurrentHashMap<>();
+    private final Map<Long, String> deletedStorage = new ConcurrentHashMap<>();
     private final AtomicLong numbering = new AtomicLong();
 
     void save(final Diary diary){
@@ -38,7 +39,10 @@ public class DiaryRepository {
     }
 
     void delete(final Long id) {
-        storage.remove(id);
+        String removedDiary = storage.remove(id);
+        if(removedDiary != null){
+            deletedStorage.put(id, removedDiary);
+        }
     }
 
     void patch(final Long id, final String body) {
@@ -49,7 +53,18 @@ public class DiaryRepository {
         storage.replace(id, body);
     }
 
+    void restore(final Long id) {
+        String beRestore = deletedStorage.remove(id);
+        if (beRestore != null) {
+            storage.put(id, beRestore);
+        }
+    }
+
     boolean existById(final Long id){
         return storage.containsKey(id);
+    }
+
+    boolean existByDeletedId(final Long id){
+        return deletedStorage.containsKey(id);
     }
 }
