@@ -8,7 +8,7 @@ public class DiaryValidator {
         if(body.trim().isEmpty()){
             throw new InvalidInputException();
         }
-        if(body.length() >= 30){
+        if(body.length() > 30){
             throw new DiaryBodyLengthException();
         }
     }
