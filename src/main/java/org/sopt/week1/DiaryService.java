@@ -37,4 +37,13 @@ public class DiaryService {
             throw new IdNotExistException();
         }
     }
+
+    void restoreDiary(final String id) {
+        final Long diaryId = Long.parseLong(id);
+        if (diaryRepository.existByDeletedId(diaryId)) {
+            diaryRepository.restore(diaryId);
+        } else {
+            throw new IdNotExistException();
+        }
+    }
 }
