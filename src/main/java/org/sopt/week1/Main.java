@@ -148,7 +148,6 @@ public class Main {
                     - PATCH : 일기 수정하기
                     - RESTORE : 일기 복구하기
                     """;
-
         }
 
         private String getStartMessage() {

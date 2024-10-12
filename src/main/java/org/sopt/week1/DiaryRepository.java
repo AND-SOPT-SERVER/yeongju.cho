@@ -1,5 +1,6 @@
 package org.sopt.week1;
 
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,9 @@ public class DiaryRepository {
     private final Map<Long, String> deletedStorage = new ConcurrentHashMap<>();
     private final Map<Long, Integer> patchCount = new ConcurrentHashMap<>(); //수정 횟수
     private final Map<Long, LocalDate> patchDate = new ConcurrentHashMap<>(); // 마지막으로 수정한 날짜
+
+public class DiaryRepository {
+    private final Map<Long, String> storage = new ConcurrentHashMap<>();
     private final AtomicLong numbering = new AtomicLong();
 
     void save(final Diary diary){
@@ -79,11 +83,22 @@ public class DiaryRepository {
             patchCount.put(id, 0);
             patchDate.put(id, LocalDate.now());
         }
+        storage.remove(id);
+    }
+
+    void patch(final Long id, final String body) {
+        /*
+        replace() : key 가 존재할 때에만 값을 변경
+        put() : key 가 존재하지 않으면 새로운 key-value 쌍을 추가
+         */
+        storage.replace(id, body);
+
     }
 
     boolean existById(final Long id){
         return storage.containsKey(id);
     }
+
 
     boolean existByDeletedId(final Long id){
         return deletedStorage.containsKey(id);
