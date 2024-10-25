@@ -11,7 +11,7 @@ public class DiaryValidator {
         if(body.trim().isEmpty()){
             throw new InvalidInputException();
         }
-        if(body.length() > 30){
+        if(countGraphemeClusters(body) > 30){
             throw new DiaryBodyLengthException();
         }
     }
