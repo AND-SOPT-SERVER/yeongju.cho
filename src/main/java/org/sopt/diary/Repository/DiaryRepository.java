@@ -15,6 +15,7 @@ import java.util.Optional;
 
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
     Optional<Diary> findByUserAndId(final User user, final Long diaryId);
+    Optional<Diary> findByUserAndTitle(final User user, final String title);
 
     // 카테고리 선택O, 최신순 정렬
     Page<Diary> findByCategoryOrderByCreatedAtDesc(Category category, Pageable pageable);

@@ -1,7 +1,6 @@
 package org.sopt.diary.service.Diary;
 
 import lombok.RequiredArgsConstructor;
-import org.sopt.diary.Repository.DiaryRepository;
 import org.sopt.diary.enums.Category;
 import org.sopt.diary.domain.Diary;
 import org.sopt.diary.enums.SortOption;
@@ -11,6 +10,8 @@ import org.sopt.diary.dto.request.DiaryDetailsDto;
 import org.sopt.diary.dto.request.DiaryUpdateDto;
 import org.sopt.diary.dto.response.DiaryListResponse;
 import org.sopt.diary.dto.response.DiaryMeListResponse;
+import org.sopt.diary.exception.DuplicateTitleException;
+import org.sopt.diary.exception.ErrorCode;
 import org.sopt.diary.service.User.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +19,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +38,11 @@ public class DiaryService {
     @Transactional
     public Diary createDiary(final Long userId, DiaryCreateDto diaryCreateDto){
         User user = userService.findById(userId);
+
+        diaryRetriever.findByUserAndTitle(user, diaryCreateDto.title())
+                .ifPresent(existingDiary -> {
+                    throw new DuplicateTitleException(ErrorCode.DUPLICATED_DIARY);
+                });
 
         Diary diary = Diary.builder()
                 .user(user)
