@@ -1,6 +1,7 @@
 package org.sopt.diary.advice;
 
 import org.sopt.diary.dto.common.ResponseDto;
+import org.sopt.diary.exception.IllegalArgumentException;
 import org.sopt.diary.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,5 +36,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ResponseDto.failValidate(errors));
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ResponseDto<String>> handleException(IllegalArgumentException e) {
+        return ResponseEntity
+                .status(e.getErrorCode().getHttpStatus())
+                .body(ResponseDto.fail(e.getErrorCode().getCode(),e.getErrorCode().getMessage()));
     }
 }
