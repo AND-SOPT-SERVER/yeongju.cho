@@ -12,6 +12,7 @@ public enum ErrorCode{
     NOT_FOUND_USER(HttpStatus.NOT_FOUND,"error","존재하지 않는 User 입니다."),
 
     INVALID_ARGUMENTS(HttpStatus.BAD_REQUEST, "error", "인자의 형식이 올바르지 않습니다."),
+    DUPLICATED_DIARY(HttpStatus.BAD_REQUEST, "error","이미 해당 제목을 가진 일기가 존재합니다.")
     ;
 
     @JsonIgnore

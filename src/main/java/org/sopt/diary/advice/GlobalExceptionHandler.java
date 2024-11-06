@@ -1,6 +1,7 @@
 package org.sopt.diary.advice;
 
 import org.sopt.diary.dto.common.ResponseDto;
+import org.sopt.diary.exception.DuplicateTitleException;
 import org.sopt.diary.exception.IllegalArgumentException;
 import org.sopt.diary.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -40,6 +41,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ResponseDto<String>> handleException(IllegalArgumentException e) {
+        return ResponseEntity
+                .status(e.getErrorCode().getHttpStatus())
+                .body(ResponseDto.fail(e.getErrorCode().getCode(),e.getErrorCode().getMessage()));
+    }
+
+    @ExceptionHandler(DuplicateTitleException.class)
+    public ResponseEntity<ResponseDto<String>> handleException(DuplicateTitleException e) {
         return ResponseEntity
                 .status(e.getErrorCode().getHttpStatus())
                 .body(ResponseDto.fail(e.getErrorCode().getCode(),e.getErrorCode().getMessage()));
