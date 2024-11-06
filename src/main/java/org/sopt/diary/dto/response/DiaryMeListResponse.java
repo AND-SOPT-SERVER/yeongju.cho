@@ -6,16 +6,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
-public record DiaryListResponse(
-        List<DiaryDto> diaryLists
+public record DiaryMeListResponse(
+        List<DiaryMeDto> diaryLists
 ) {
-
     @Builder
-    public record DiaryDto(
+    public record DiaryMeDto(
             Long id,
-            Long userId,
             String title,
-            String nickname,
             LocalDateTime createdAt
     ){
     }
