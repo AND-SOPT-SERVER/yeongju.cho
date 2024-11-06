@@ -14,10 +14,6 @@ public enum SortOption {
     private final String content;
 
     public static SortOption fromContent(String content) {
-        if (content == null || content.trim().isEmpty()) {
-            throw new IllegalArgumentException(ErrorCode.INVALID_ARGUMENTS);
-        }
-
         for (SortOption sortOption : SortOption.values()) {
             if (sortOption.getContent().equals(content)) {
                 return sortOption;

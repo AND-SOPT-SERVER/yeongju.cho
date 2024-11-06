@@ -16,10 +16,6 @@ public enum Category {
     private final String content;
 
     public static Category fromContent(String content) {
-        if (content == null || content.trim().isEmpty()) {
-            throw new IllegalArgumentException(ErrorCode.INVALID_ARGUMENTS);
-        }
-
         for (Category category : Category.values()) {
             if (category.getContent().equals(content)) {
                 return category;
