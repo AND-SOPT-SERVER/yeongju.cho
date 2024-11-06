@@ -3,7 +3,7 @@ package org.sopt.diary.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.sopt.diary.enums.Category;
-import org.sopt.diary.dto.request.DiaryDetailsDto;
+import org.sopt.diary.dto.response.DiaryDetailsResponse;
 import org.sopt.diary.dto.request.DiaryCreateDto;
 import org.sopt.diary.dto.request.DiaryUpdateDto;
 import org.sopt.diary.dto.response.DiaryListResponse;
@@ -35,7 +35,7 @@ public class DiaryController {
 
     // 일기 상세 조회
     @GetMapping("/diary/{diaryId}")
-    public ResponseEntity<DiaryDetailsDto> getDiary(
+    public ResponseEntity<DiaryDetailsResponse> getDiary(
             @RequestHeader("Authorization") final Long userId,
             @PathVariable final Long diaryId
     ){

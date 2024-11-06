@@ -6,7 +6,7 @@ import org.sopt.diary.domain.Diary;
 import org.sopt.diary.enums.SortOption;
 import org.sopt.diary.domain.User;
 import org.sopt.diary.dto.request.DiaryCreateDto;
-import org.sopt.diary.dto.request.DiaryDetailsDto;
+import org.sopt.diary.dto.response.DiaryDetailsResponse;
 import org.sopt.diary.dto.request.DiaryUpdateDto;
 import org.sopt.diary.dto.response.DiaryListResponse;
 import org.sopt.diary.dto.response.DiaryMeListResponse;
@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -55,11 +54,11 @@ public class DiaryService {
     }
 
     // 일기 상세 조회
-    public DiaryDetailsDto getDiaryDetails(final Long userId, final Long diaryId){
+    public DiaryDetailsResponse getDiaryDetails(final Long userId, final Long diaryId){
         User user = userService.findById(userId);
         Diary diary = diaryRetriever.findByUserAndDiaryId(user, diaryId);
 
-        return DiaryDetailsDto.builder()
+        return DiaryDetailsResponse.builder()
                 .id(diary.getId())
                 .title(diary.getTitle())
                 .content(diary.getContent())

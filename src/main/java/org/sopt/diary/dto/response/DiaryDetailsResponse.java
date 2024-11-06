@@ -1,4 +1,4 @@
-package org.sopt.diary.dto.request;
+package org.sopt.diary.dto.response;
 
 import lombok.Builder;
 import org.sopt.diary.enums.Category;
@@ -6,7 +6,7 @@ import org.sopt.diary.enums.Category;
 import java.time.LocalDateTime;
 
 @Builder
-public record DiaryDetailsDto(
+public record DiaryDetailsResponse(
         Long id,
         String title,
         String content,
