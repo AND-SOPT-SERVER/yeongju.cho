@@ -1,7 +1,7 @@
 package org.sopt.diary.service.Diary;
 
 import lombok.RequiredArgsConstructor;
-import org.sopt.diary.Repository.DiaryRepository;
+import org.sopt.diary.repository.DiaryRepository;
 import org.sopt.diary.enums.Category;
 import org.sopt.diary.domain.Diary;
 import org.sopt.diary.domain.User;
@@ -21,7 +21,7 @@ public class DiaryRetriever {
 
     public Diary findByUserAndDiaryId(final User user, final Long diaryId) {
         return diaryRepository.findByUserAndId(user, diaryId).orElseThrow(
-                ()-> new NotFoundException(ErrorCode.NOT_FOUND_DIARY)
+                () -> new NotFoundException(ErrorCode.NOT_FOUND_DIARY)
         );
     }
 
@@ -29,7 +29,11 @@ public class DiaryRetriever {
         return diaryRepository.findByUserAndTitle(user, title);
     }
 
-    public Page<Diary> findByCategoryOrderByCreatedAtDesc(final Category category, final Pageable pageable){
+    public Optional<Diary> findLatestByUser(final User user) {
+        return diaryRepository.findLatestByUser(user);
+    }
+
+    public Page<Diary> findByCategoryOrderByCreatedAtDesc(final Category category, final Pageable pageable) {
         return diaryRepository.findByCategoryOrderByCreatedAtDesc(category, pageable);
     }
 
@@ -41,26 +45,26 @@ public class DiaryRetriever {
         return diaryRepository.findAllOrderByContentLengthDesc(pageable);
     }
 
-    public Page<Diary> findAllByOrderByCreatedAtDesc(final Pageable pageable){
+    public Page<Diary> findAllByOrderByCreatedAtDesc(final Pageable pageable) {
         return diaryRepository.findAllByOrderByCreatedAtDesc(pageable);
     }
 
     /*
     User
      */
-    public Page<Diary> findByUserIdAndCategoryOrderByCreatedAtDesc(Long userId, Category category, Pageable pageable){
+    public Page<Diary> findByUserIdAndCategoryOrderByCreatedAtDesc(Long userId, Category category, Pageable pageable) {
         return diaryRepository.findByUserIdAndCategoryOrderByCreatedAtDesc(userId, category, pageable);
     }
 
-    public Page<Diary> findByUserIdAndCategoryOrderByContentLengthDesc(Long userId, Category category, Pageable pageable){
+    public Page<Diary> findByUserIdAndCategoryOrderByContentLengthDesc(Long userId, Category category, Pageable pageable) {
         return diaryRepository.findByUserIdAndCategoryOrderByContentLengthDesc(userId, category, pageable);
     }
 
-    public Page<Diary> findByUserIdOrderByContentLengthDesc(Long userId, Pageable pageable){
+    public Page<Diary> findByUserIdOrderByContentLengthDesc(Long userId, Pageable pageable) {
         return diaryRepository.findByUserIdOrderByContentLengthDesc(userId, pageable);
     }
 
-    public Page<Diary> findByUserIdOrderByCreatedAtDesc(Long userId, Pageable pageable){
+    public Page<Diary> findByUserIdOrderByCreatedAtDesc(Long userId, Pageable pageable) {
         return diaryRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable);
     }
 }

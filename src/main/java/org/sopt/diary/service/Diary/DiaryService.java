@@ -10,6 +10,7 @@ import org.sopt.diary.dto.response.DiaryDetailsResponse;
 import org.sopt.diary.dto.request.DiaryUpdateDto;
 import org.sopt.diary.dto.response.DiaryListResponse;
 import org.sopt.diary.dto.response.DiaryMeListResponse;
+import org.sopt.diary.exception.DiaryCreationTimeLimitException;
 import org.sopt.diary.exception.DuplicateTitleException;
 import org.sopt.diary.exception.ErrorCode;
 import org.sopt.diary.service.User.UserService;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -38,9 +40,18 @@ public class DiaryService {
     public Diary createDiary(final Long userId, DiaryCreateDto diaryCreateDto){
         User user = userService.findById(userId);
 
+        // 제목 중복 검사
         diaryRetriever.findByUserAndTitle(user, diaryCreateDto.title())
                 .ifPresent(existingDiary -> {
                     throw new DuplicateTitleException(ErrorCode.DUPLICATED_DIARY);
+                });
+
+        // 최근 작성 시간 검사
+        diaryRetriever.findLatestByUser(user)
+                .ifPresent(latestDiary->{
+                    if (latestDiary.getCreatedAt().isAfter(LocalDateTime.now().minusMinutes(5))) {
+                        throw new DiaryCreationTimeLimitException(ErrorCode.DIARY_CREATION_NOT_ALLOWED);
+                    }
                 });
 
         Diary diary = Diary.builder()

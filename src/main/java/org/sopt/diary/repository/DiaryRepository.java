@@ -1,4 +1,4 @@
-package org.sopt.diary.Repository;
+package org.sopt.diary.repository;
 
 
 import org.sopt.diary.enums.Category;
@@ -15,14 +15,19 @@ import java.util.Optional;
 
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
     Optional<Diary> findByUserAndId(final User user, final Long diaryId);
+
     Optional<Diary> findByUserAndTitle(final User user, final String title);
+
+    @Query("SELECT d FROM Diary d WHERE d.user = :user " +
+            "ORDER BY d.createdAt DESC ")
+    Optional<Diary> findLatestByUser(final User user);
 
     // 카테고리 선택O, 최신순 정렬
     Page<Diary> findByCategoryOrderByCreatedAtDesc(Category category, Pageable pageable);
 
     // 카테고리 선택O, 길이순 정렬
     @Query("SELECT d FROM Diary d WHERE d.category = :category " +
-                    "ORDER BY LENGTH(d.content) DESC"
+            "ORDER BY LENGTH(d.content) DESC"
     )
     Page<Diary> findByCategoryOrderByContentLengthDesc(@Param("category") Category category, Pageable pageable);
 
