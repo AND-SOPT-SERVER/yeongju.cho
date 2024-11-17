@@ -49,17 +49,14 @@ public class DiaryController {
             @RequestParam(name = "sort", required = false) final SortOption sortOption,
             @RequestParam(defaultValue = "0") final int page,
             @RequestParam(defaultValue = "10") final int size
-            ){
-        Category categoryContent = null;
-        if (category != null) {
-            categoryContent = Category.fromContent(category.getContent());
-        }
-
-        SortOption sortOptionContent = null;
-        if (sortOption != null) {
-            sortOptionContent = SortOption.fromContent(sortOption.getContent());
-        }
-        return ResponseEntity.ok(diaryService.getDiaryList(categoryContent, sortOptionContent, page, size));
+    ) {
+        return ResponseEntity.ok(
+                diaryService.getDiaryList(
+                        convertCategory(category),
+                        convertSortOption(sortOption),
+                        page, size
+                )
+        );
     }
 
     // 내 일기 목록 조회
@@ -71,16 +68,14 @@ public class DiaryController {
             @RequestParam(defaultValue = "0") final int page,
             @RequestParam(defaultValue = "10") final int size
     ){
-        Category categoryContent = null;
-        if (category != null) {
-            categoryContent = Category.fromContent(category.getContent());
-        }
-
-        SortOption sortOptionContent = null;
-        if (sortOption != null) {
-            sortOptionContent = SortOption.fromContent(sortOption.getContent());
-        }
-        return ResponseEntity.ok(diaryService.getDiaryMeList(userId, categoryContent, sortOptionContent, page, size));
+        return ResponseEntity.ok(
+                diaryService.getDiaryMeList(
+                        userId,
+                        convertCategory(category),
+                        convertSortOption(sortOption),
+                        page, size
+                )
+        );
     }
 
     // 일기 수정
@@ -102,5 +97,13 @@ public class DiaryController {
     ) {
         diaryService.removeDiary(userId, diaryId);
         return ResponseEntity.noContent().build();
+    }
+
+    private Category convertCategory(final Category category) {
+        return category != null ? Category.fromContent(category.getContent()) : null;
+    }
+
+    private SortOption convertSortOption(final SortOption sortOption) {
+        return sortOption != null ? SortOption.fromContent(sortOption.getContent()) : null;
     }
 }
