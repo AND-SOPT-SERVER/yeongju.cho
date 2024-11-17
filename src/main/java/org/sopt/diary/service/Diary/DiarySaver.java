@@ -1,7 +1,7 @@
 package org.sopt.diary.service.Diary;
 
 import lombok.RequiredArgsConstructor;
-import org.sopt.diary.Repository.DiaryRepository;
+import org.sopt.diary.repository.DiaryRepository;
 import org.sopt.diary.domain.Diary;
 import org.springframework.stereotype.Component;
 

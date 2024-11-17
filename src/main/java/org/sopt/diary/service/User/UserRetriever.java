@@ -1,7 +1,7 @@
 package org.sopt.diary.service.User;
 
 import lombok.RequiredArgsConstructor;
-import org.sopt.diary.Repository.UserRepository;
+import org.sopt.diary.repository.UserRepository;
 import org.sopt.diary.domain.User;
 import org.sopt.diary.exception.ErrorCode;
 import org.sopt.diary.exception.NotFoundException;

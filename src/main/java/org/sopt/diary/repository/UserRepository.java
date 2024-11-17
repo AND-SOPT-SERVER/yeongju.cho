@@ -1,4 +1,4 @@
-package org.sopt.diary.Repository;
+package org.sopt.diary.repository;
 
 import org.sopt.diary.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
